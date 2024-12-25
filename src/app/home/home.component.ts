@@ -11,13 +11,13 @@ import { HousingService } from '../housing.service';
   imports: [CommonModule, HousingLocationComponent],
   template: `
     <section>
-      <form>
-        <input type="text" placeholder="Filter by city" />
-        <button type="button" class="primary">Search</button>
+      <form (submit)="preventDefault($event)">
+        <input type="text" placeholder="Filter by city" #filter (keyup.enter)="filterResults(filter.value)" />
+        <button type="button" class="primary" (click)="filterResults(filter.value)">Search</button>
       </form>
     </section>
     <section class="results">
-      <app-housing-location *ngFor="let housingLocation of housingLocationList" [housingLocation]="housingLocation"></app-housing-location>
+      <app-housing-location *ngFor="let housingLocation of filteredLocationList" [housingLocation]="housingLocation"></app-housing-location>
     </section>
   `,
   styleUrls: ['./home.component.css']
@@ -25,10 +25,23 @@ import { HousingService } from '../housing.service';
 export class HomeComponent {
   housingLocationList: HousingLocation[] = [];
   housingService: HousingService = inject(HousingService);
+  filteredLocationList: HousingLocation[] = [];
 
   constructor() {
     this.housingService.getAllHousingLocations().then((locations) => {
       this.housingLocationList = locations;
+      this.filteredLocationList = locations;
     });
+  }
+
+  filterResults(text: string) {
+    if(!text) this.filteredLocationList = this.housingLocationList;
+    this.filteredLocationList = this.housingLocationList.filter(
+      location => location?.city.toLowerCase().includes(text.toLowerCase())
+    );
+  }
+
+  preventDefault(event: Event) {
+    event.preventDefault();
   }
 }
