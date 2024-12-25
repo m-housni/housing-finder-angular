@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { HomeComponent } from "./home/home.component";
 import { RouterModule } from '@angular/router';
 
 @Component({
@@ -8,7 +7,7 @@ import { RouterModule } from '@angular/router';
   template: `
   <main>
     <header class="brand-name">
-      <img src="/assets/logo.svg" class="brand-logo" alt="logo" aria-hidden="true" />
+      <a routerLink=""><img src="/assets/logo.svg" class="brand-logo" alt="logo" aria-hidden="true" /></a>
     </header>
     <section class="content">
       <router-outlet></router-outlet>
@@ -16,7 +15,7 @@ import { RouterModule } from '@angular/router';
   </main>
   `,
   styleUrls: ['./app.component.css'],
-  imports: [HomeComponent, RouterModule],
+  imports: [RouterModule],
 })
 export class AppComponent {
   title = 'homes';
